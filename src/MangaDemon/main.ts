@@ -2,7 +2,6 @@
 /* Copyright © 2026 Inkdex */
 
 import {
-  ContentRating,
   CookieStorageInterceptor,
   DiscoverSectionType,
   type Chapter,
@@ -11,6 +10,7 @@ import {
   type DiscoverSection,
   type DiscoverSectionItem,
   type ExtensionImpl,
+  type Form,
   type PagedResults,
   type SearchQuery,
   type SortingOption,
@@ -37,6 +37,7 @@ import {
   NEW_TITLES_SECTION_TITLE,
   type SearchResultItem,
 } from "./models";
+import { getContentRating, MangaDemonSettingsForm } from "./forms";
 import { MangaDemonInterceptor } from "./network";
 import { MangaDemonParser } from "./parsers";
 import type MangaDemonConfig from "./pbconfig";
@@ -121,6 +122,10 @@ class MangaDemonExtension implements ExtensionImpl<typeof MangaDemonConfig> {
   async initialise(): Promise<void> {
     this.cookieStorageInterceptor.registerInterceptor();
     this.mangaDemonInterceptor.registerInterceptor();
+  }
+
+  async getSettingsForm(): Promise<Form> {
+    return new MangaDemonSettingsForm();
   }
 
   // Returns the discover sections (e.g., Most Viewed, Latest Updates) for the app's home screen
@@ -574,7 +579,7 @@ class MangaDemonExtension implements ExtensionImpl<typeof MangaDemonConfig> {
           status: details.status || "Unknown",
           ...(details.rating !== undefined ? { rating: details.rating } : {}),
           thumbnailUrl: details.cover || "",
-          contentRating: ContentRating.MATURE,
+          contentRating: getContentRating(),
         },
       };
       return sourceManga;

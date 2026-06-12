@@ -9,6 +9,7 @@
 import { type Chapter, type DiscoverSectionItem, type SourceManga } from "@paperback/types";
 import { type CheerioAPI } from "cheerio";
 
+import { getContentRating } from "./forms";
 import { type SearchResultItem } from "./models";
 
 export class MangaDemonParser {
@@ -35,6 +36,7 @@ export class MangaDemonParser {
         title,
         imageUrl,
         subtitle: `${views.toLocaleString()} views`,
+        contentRating: getContentRating(),
       });
     });
     return items;
@@ -65,6 +67,7 @@ export class MangaDemonParser {
         title,
         subtitle: topChapter,
         imageUrl: imageUrl,
+        contentRating: getContentRating(),
       });
     });
     // Only check for next page if there are items
@@ -106,6 +109,7 @@ export class MangaDemonParser {
           title,
           imageUrl,
           views,
+          contentRating: getContentRating(),
         });
       }
     });
@@ -135,6 +139,7 @@ export class MangaDemonParser {
           title,
           imageUrl,
           views,
+          contentRating: getContentRating(),
         });
       }
     });
